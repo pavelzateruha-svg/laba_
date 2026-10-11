@@ -1,0 +1,3 @@
+{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "User logged in"}
+{"timestamp": "2026-10-12T10:05:00", "level": "ERROR", "source": "db", "message": "Connection failed"}
+{"timestamp": "2026-10-12T10:10:00", "level": "WARNING", "source": "auth", "message": "Too many attempts"}
