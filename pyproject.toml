@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "streamstats"
+version = "0.1.0"
+description = "Потоковый анализатор файлов для лабораторной работы"
+requires-python = ">=3.8"
+
+# Эта секция критически важна! Она говорит Python искать пакет внутри папки src
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Настройки для ruff (линтера)
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+# Настройки для pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]

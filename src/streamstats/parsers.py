@@ -69,9 +69,23 @@ class JsonlParser:
 
                 try:
                     data = json.loads(line)
+                except json.JSONDecodeError as e:
+                    # ВАЖНО: превращаем ошибку JSON в нашу InvalidEventError
+                    if self.skip_invalid:
+                        logging.warning(f"Пропуск строки {line_number} в {self.filepath}: неверный JSON - {e}")
+                        self.skipped_lines += 1
+                        continue
+                    else:
+                        raise InvalidEventError(
+                            f"Неверный JSON: {e}",
+                            filename=self.filepath,
+                            line_number=line_number
+                        )
+
+                try:
                     event = _validate_and_create_event(data, self.filepath, line_number)
                     yield event
-                except (json.JSONDecodeError, InvalidEventError, InvalidTimestampError) as e:
+                except (InvalidEventError, InvalidTimestampError) as e:
                     if self.skip_invalid:
                         logging.warning(f"Пропуск строки {line_number} в {self.filepath}: {e}")
                         self.skipped_lines += 1
