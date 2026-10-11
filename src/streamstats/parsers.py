@@ -11,7 +11,6 @@ ALLOWED_LEVELS = {'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'}
 
 
 def _validate_and_create_event(data: dict, filename: str, line_number: int) -> Event:
-    """Проверяет словарь данных и возвращает объект Event."""
     required_fields = ['timestamp', 'level', 'source', 'message']
     for field in required_fields:
         if field not in data or data[field] is None:
@@ -53,8 +52,6 @@ def _validate_and_create_event(data: dict, filename: str, line_number: int) -> E
 
 
 class JsonlParser:
-    """Парсер для JSONL файлов."""
-
     def __init__(self, filepath: str, skip_invalid: bool = False):
         self.filepath = filepath
         self.skip_invalid = skip_invalid
@@ -70,7 +67,6 @@ class JsonlParser:
                 try:
                     data = json.loads(line)
                 except json.JSONDecodeError as e:
-                    # ВАЖНО: превращаем ошибку JSON в нашу InvalidEventError
                     if self.skip_invalid:
                         logging.warning(f"Пропуск строки {line_number} в {self.filepath}: неверный JSON - {e}")
                         self.skipped_lines += 1
@@ -94,8 +90,6 @@ class JsonlParser:
 
 
 class CsvParser:
-    """Парсер для CSV файлов."""
-
     def __init__(self, filepath: str, skip_invalid: bool = False):
         self.filepath = filepath
         self.skip_invalid = skip_invalid
@@ -117,7 +111,6 @@ class CsvParser:
                         raise
 
 
-# Функции-обёртки для обратной совместимости (если где-то использовались)
 def parse_jsonl(filepath: str, skip_invalid: bool = False):
     return JsonlParser(filepath, skip_invalid)
 

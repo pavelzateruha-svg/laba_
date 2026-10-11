@@ -3,8 +3,6 @@ from streamstats.models import Statistics
 
 
 def generate_report(stats: Statistics, output_path: str):
-    """Формирует и сохраняет JSON-отчёт."""
-    # Формируем словарь для отчёта
     report_data = {
         "total_events": stats.total_events,
         "by_level": dict(stats.by_level),
@@ -18,6 +16,5 @@ def generate_report(stats: Statistics, output_path: str):
         "skipped_lines": stats.skipped_lines
     }
 
-    # Записываем в файл
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(report_data, f, indent=2, ensure_ascii=False)

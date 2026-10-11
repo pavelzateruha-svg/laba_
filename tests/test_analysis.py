@@ -4,7 +4,6 @@ from streamstats.analysis import update_statistics, analyze_files
 
 
 def test_update_statistics_basic():
-    """Тест базового обновления статистики."""
     stats = Statistics()
     event = Event(
         timestamp="2026-10-12T10:00:00",
@@ -21,7 +20,6 @@ def test_update_statistics_basic():
 
 
 def test_update_statistics_error():
-    """Тест подсчёта ошибок (ERROR/CRITICAL)."""
     stats = Statistics()
     event = Event(
         timestamp="2026-10-12T10:00:00",
@@ -35,7 +33,6 @@ def test_update_statistics_error():
 
 
 def test_update_statistics_critical():
-    """Тест подсчёта CRITICAL как ошибки."""
     stats = Statistics()
     event = Event(
         timestamp="2026-10-12T10:00:00",
@@ -49,7 +46,6 @@ def test_update_statistics_critical():
 
 
 def test_update_statistics_timestamps():
-    """Тест обновления первой и последней метки времени."""
     stats = Statistics()
 
     event1 = Event(timestamp="2026-10-12T10:00:00", level="INFO", source="auth", message="1")
@@ -65,7 +61,6 @@ def test_update_statistics_timestamps():
 
 
 def test_update_statistics_multiple():
-    """Тест множественных обновлений."""
     stats = Statistics()
 
     events = [
@@ -85,7 +80,6 @@ def test_update_statistics_multiple():
 
 
 def test_analyze_files_single_csv(tmp_path):
-    """Integration-тест: анализ одного CSV файла."""
     file = tmp_path / "test.csv"
     file.write_text(
         "timestamp,level,source,message\n"
@@ -104,7 +98,6 @@ def test_analyze_files_single_csv(tmp_path):
 
 
 def test_analyze_files_single_jsonl(tmp_path):
-    """Integration-тест: анализ одного JSONL файла."""
     file = tmp_path / "test.jsonl"
     file.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n'
@@ -121,7 +114,6 @@ def test_analyze_files_single_jsonl(tmp_path):
 
 
 def test_analyze_files_multiple(tmp_path):
-    """Тест анализа нескольких файлов."""
     file1 = tmp_path / "file1.jsonl"
     file1.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n'
@@ -142,7 +134,6 @@ def test_analyze_files_multiple(tmp_path):
 
 
 def test_analyze_files_skip_invalid(tmp_path):
-    """Тест анализа с пропуском невалидных строк."""
     file = tmp_path / "skip.jsonl"
     file.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n'

@@ -5,9 +5,6 @@ import pytest
 
 
 def run_cli(args):
-    """Вспомогательная функция для запуска CLI."""
-    # ВАЖНО: используем sys.executable вместо "python",
-    # чтобы subprocess использовал интерпретатор из .venv
     result = subprocess.run(
         [sys.executable, "-m", "streamstats"] + args,
         capture_output=True,
@@ -18,26 +15,23 @@ def run_cli(args):
 
 
 def test_cli_help():
-    """Тест вывода справки."""
     result = run_cli(["--help"])
     assert result.returncode == 0
     assert "analyze" in result.stdout
 
 
 def test_cli_analyze_no_args():
-    """Тест запуска без аргументов."""
     result = run_cli(["analyze"])
     assert result.returncode != 0
 
 
 def test_cli_analyze_csv(tmp_path):
-    """Integration-тест CLI с CSV файлом."""
     file = tmp_path / "test.csv"
     file.write_text(
         "timestamp,level,source,message\n"
         "2026-10-12T10:00:00,INFO,auth,OK\n"
         "2026-10-12T10:05:00,ERROR,db,Fail\n",
-        encoding='utf-8'  # ← добавили
+        encoding='utf-8'
     )
     output = tmp_path / "report.json"
 
@@ -55,7 +49,6 @@ def test_cli_analyze_csv(tmp_path):
 
 
 def test_cli_analyze_jsonl(tmp_path):
-    """Integration-тест CLI с JSONL файлом."""
     file = tmp_path / "test.jsonl"
     file.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n',
@@ -74,7 +67,6 @@ def test_cli_analyze_jsonl(tmp_path):
 
 
 def test_cli_invalid_file_no_skip(tmp_path):
-    """Тест CLI с невалидным файлом без --skip-invalid (должен упасть с кодом 2)."""
     file = tmp_path / "invalid.jsonl"
     file.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n'
@@ -93,7 +85,6 @@ def test_cli_invalid_file_no_skip(tmp_path):
 
 
 def test_cli_invalid_file_with_skip(tmp_path):
-    """Тест CLI с невалидным файлом и --skip-invalid."""
     file = tmp_path / "invalid.jsonl"
     file.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n'
@@ -119,7 +110,6 @@ def test_cli_invalid_file_with_skip(tmp_path):
 
 
 def test_cli_multiple_files(tmp_path):
-    """Тест CLI с несколькими файлами."""
     file1 = tmp_path / "file1.jsonl"
     file1.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "auth", "message": "OK"}\n',
@@ -145,7 +135,6 @@ def test_cli_multiple_files(tmp_path):
 
 
 def test_cli_unicode(tmp_path):
-    """Тест CLI с Unicode символами."""
     file = tmp_path / "unicode.jsonl"
     file.write_text(
         '{"timestamp": "2026-10-12T10:00:00", "level": "INFO", "source": "авторизация", "message": "Пользователь вошёл 🚀"}\n',
@@ -166,7 +155,6 @@ def test_cli_unicode(tmp_path):
 
 
 def test_cli_empty_file(tmp_path):
-    """Тест CLI с пустым файлом."""
     file = tmp_path / "empty.jsonl"
     file.write_text("", encoding='utf-8')
     output = tmp_path / "report.json"
@@ -184,7 +172,6 @@ def test_cli_empty_file(tmp_path):
 
 
 def test_cli_invalid_format(tmp_path):
-    """Тест CLI с неподдерживаемым форматом."""
     file = tmp_path / "test.txt"
     file.write_text("some data\n", encoding='utf-8')
     output = tmp_path / "report.json"

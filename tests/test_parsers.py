@@ -6,7 +6,6 @@ from streamstats.errors import InvalidEventError, InvalidTimestampError
 # Тесты для JSONL файлов
 
 def test_parse_jsonl_valid(tmp_path):
-    """Тест обычного валидного JSONL файла"""
     file = tmp_path / "test.jsonl"
 
     file.write_text(
@@ -23,7 +22,6 @@ def test_parse_jsonl_valid(tmp_path):
 
 
 def test_parse_jsonl_empty_file(tmp_path):
-    """Тест пустого JSONL файла"""
     file = tmp_path / "empty.jsonl"
     file.write_text("", encoding='utf-8')
 
@@ -33,7 +31,6 @@ def test_parse_jsonl_empty_file(tmp_path):
 
 
 def test_parse_jsonl_invalid_line(tmp_path):
-    """Тест файла с повреждённой строкой"""
     file = tmp_path / "invalid.jsonl"
 
     file.write_text(
@@ -47,7 +44,6 @@ def test_parse_jsonl_invalid_line(tmp_path):
 
 
 def test_parse_jsonl_invalid_timestamp(tmp_path):
-    """Тест файла с неправильной датой"""
     file = tmp_path / "bad_ts.jsonl"
 
     file.write_text(
@@ -60,7 +56,6 @@ def test_parse_jsonl_invalid_timestamp(tmp_path):
 
 
 def test_parse_jsonl_skip_invalid(tmp_path):
-    """Тест пропуска невалидных строк"""
     file = tmp_path / "skip.jsonl"
 
     file.write_text(
@@ -78,7 +73,6 @@ def test_parse_jsonl_skip_invalid(tmp_path):
 
 
 def test_parse_jsonl_missing_field(tmp_path):
-    """Тест файла без обязательного поля"""
     file = tmp_path / "missing.jsonl"
 
     file.write_text(
@@ -127,9 +121,6 @@ def test_parse_jsonl_unicode(tmp_path):
     assert len(events) == 1
     assert events[0].source == "авторизация"
     assert "вошёл" in events[0].message
-
-
-# Тесты для CSV файлов
 
 def test_parse_csv_valid(tmp_path):
     file = tmp_path / "test.csv"

@@ -11,13 +11,10 @@ from streamstats.errors import (
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """Настройка парсера аргументов командной строки."""
     parser = argparse.ArgumentParser(description="Потоковый анализатор файлов (Stream Stats)")
 
-    # Добавляем подкоманды
     subparsers = parser.add_subparsers(dest="command", help="Доступные команды")
 
-    # Подкоманда analyze
     analyze_parser = subparsers.add_parser("analyze", help="Анализ входных файлов и генерация отчета")
 
     analyze_parser.add_argument("inputs", nargs="+", help="Пути к входным файлам")
@@ -33,19 +30,14 @@ def main():
     parser = build_parser()
     args = parser.parse_args()
 
-    # Если команда не указана, выводим справку
     if not args.command:
         parser.print_help()
         sys.exit(1)
 
-    # Настраиваем логирование (для вывода WARNING при --skip-invalid)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     try:
         if args.command == "analyze":
-            # Импортируем и запускаем основную логику.
-            # ЗАМЕНИ 'analyze_files' на название функции, которую ты создашь
-            # в analysis.py или parsers.py для запуска обработки!
             from streamstats.analysis import analyze_files
 
             analyze_files(
@@ -60,18 +52,14 @@ def main():
         sys.exit(1)
 
     except (InvalidEventError, InvalidTimestampError) as e:
-        # По заданию: остановить обработку и завершить CLI с кодом 2
         print(f"Ошибка валидации: {e}", file=sys.stderr)
         sys.exit(2)
 
     except StreamStatsError as e:
-        # Другие кастомные ошибки (например, UnsupportedFormatError)
         print(f"Ошибка: {e}", file=sys.stderr)
         sys.exit(1)
 
     except Exception as e:
-        # На границе CLI преобразуем неизвестные ошибки в понятные,
-        # либо просто выводим и падаем с кодом 1.
         print(f"Непредвиденная ошибка: {e}", file=sys.stderr)
         sys.exit(1)
 
